@@ -13,6 +13,20 @@ body {
     font-size: 16px;
 }
 
+/* 年齢注意の常時表示 */
+.age-notice {
+    font-size: 0.95rem;
+}
+.age-notice.small {
+    font-size: 0.85rem;
+}
+
+.disclaimer {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
