@@ -16,7 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initArticleAnimation();
 
     // 目次生成
-    generateTableOfContents();
+    if (!(document.body && document.body.dataset && document.body.dataset.mode === 'ad')) {
+        generateTableOfContents();
+    }
 
     // 読了時間の更新
     updateReadingTime();
@@ -75,7 +77,7 @@ function initButtonEffects() {
     const buttons = document.querySelectorAll('.btn');
 
     buttons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
             // リップル効果
             const ripple = document.createElement('span');
             ripple.classList.add('ripple');
@@ -208,12 +210,14 @@ function initArticleAnimation() {
 // 目次生成
 function generateTableOfContents() {
     const articleBody = document.querySelector('.article-body');
+    if (!articleBody) return;
     const headings = articleBody.querySelectorAll('h2');
 
     if (headings.length === 0) return;
 
     // サイドバーに目次を追加
     const sidebar = document.querySelector('.sidebar');
+    if (!sidebar) return;
     const tocWidget = document.createElement('div');
     tocWidget.className = 'sidebar-widget toc-widget';
 
@@ -236,6 +240,7 @@ function generateTableOfContents() {
 // 読了時間の計算と更新
 function updateReadingTime() {
     const articleBody = document.querySelector('.article-body');
+    if (!articleBody) return;
     const text = articleBody.textContent;
     const wordCount = text.split(/\s+/).length;
     const readingTimeMinutes = Math.ceil(wordCount / 200); // 1分間に200語と仮定
@@ -281,7 +286,7 @@ function initShareButtons() {
 // Twitterシェア機能
 function shareOnTwitter() {
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(document.title + ' #たっぷる #マッチングアプリ');
+    const text = encodeURIComponent(document.title + ' #Tapple #マッチングアプリ');
     const twitterUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
 }
