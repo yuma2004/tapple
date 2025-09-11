@@ -74,8 +74,8 @@ body {
 .trust-badges li { padding: 6px 10px; border-radius: 20px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.35); font-size: 0.85rem; }
 
 .hero-right { display: flex; justify-content: center; }
-.device-mockup { width: 320px; max-width: 100%; aspect-ratio: 9/19.5; background: #111; border-radius: 36px; padding: 12px; box-shadow: 0 30px 80px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.25); border: 2px solid rgba(255,255,255,0.25); position: relative; }
-.device-notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 120px; height: 22px; background: #000; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; opacity: 0.5; }
+.device-mockup { width: clamp(260px, 30vw, 360px); max-width: 100%; aspect-ratio: 9/19.5; background: #111; border-radius: 36px; padding: 12px; box-shadow: 0 30px 80px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.25); border: 2px solid rgba(255,255,255,0.25); position: relative; }
+.device-notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 34%; height: 22px; background: #000; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; opacity: 0.5; }
 .device-mockup img { width: 100%; height: 100%; object-fit: cover; border-radius: 28px; border: 1px solid rgba(255,255,255,0.15); }
 
 .hero-scroll-hint { margin-top: 16px; text-align: center; opacity: 0.9; font-size: 0.95rem; }
@@ -92,7 +92,7 @@ body {
 
 /* 年齢注意の常時表示 */
 .age-notice {
-    font-size: 0.95rem;
+    font-size: 1.2rem;
 }
 .age-notice.small {
     font-size: 0.85rem;
@@ -102,6 +102,14 @@ body {
     color: #666;
     font-size: 0.9rem;
     margin-top: 0.5rem;
+}
+
+/* ヒーロー下の注釈 */
+.photo-note {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
 }
 
 .container {
@@ -263,6 +271,20 @@ body {
     font-weight: 700;
     color: #FF69B4;
     text-decoration: none;
+    margin: 0;
+    line-height: 1;
+}
+
+/* 画像ロゴのサイズ最適化 */
+
+.logo img {
+    height: 60px;
+    width: auto;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .logo img { height: 28px; }
 }
 
 .nav-menu {
@@ -296,6 +318,51 @@ body {
     padding: 120px 0 40px;
     border-bottom: 1px solid #eee;
     margin-top: 80px;
+}
+
+/* クレームボックス（No1・訴求） */
+.claim-box {
+    background: #fff;
+    border: 3px solid #FFE4E1;
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    margin: 12px 0 16px;
+}
+
+.claim-box.large {
+    padding: 22px 24px;
+}
+
+.claim-title {
+    color: #2c3e50;
+    font-weight: 800;
+    line-height: 1.35;
+    font-size: 1.8rem;
+}
+
+.claim-title .note {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.claim-footnote {
+    margin-top: 8px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.claim-text {
+    color: #2c3e50;
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .claim-title { font-size: 1.4rem; }
+    .claim-text { font-size: 1.2rem; }
 }
 
 /* LP 共通 */
