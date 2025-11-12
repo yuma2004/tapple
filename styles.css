@@ -5,13 +5,25 @@
     box-sizing: border-box;
 }
 
+:root {
+    --header-height: clamp(56px, calc(52px + 1vw), 72px);
+}
+
+@media (max-width: 768px) {
+    :root {
+        --header-height: clamp(52px, calc(48px + 1.5vw), 64px);
+    }
+}
+
 body {
     font-family: 'Noto Sans JP', sans-serif;
     line-height: 1.8;
     color: #333;
     background: #f8f9fa;
     font-size: 16px;
+    padding-top: calc(var(--header-height) + 50px); /* ヘッダー + 年齢注意の帯の高さ */
 }
+
 
 /* （LP切替時に使用していた非表示スタイルは削除） */
 
@@ -91,11 +103,42 @@ body {
 }
 
 /* 年齢注意の常時表示 */
-.age-notice {
-    font-size: 1.2rem;
+.age-notice-wrapper {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 999 !important;
+    padding-top: var(--header-height) !important;
 }
+
+.age-notice {
+    position: relative;
+    z-index: 999;
+    display: block !important;
+    padding: 10px 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    background: #fff0f5;
+    color: #d63384;
+    border-top: 1px solid #ffd6e7;
+    border-bottom: 1px solid #ffd6e7;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .age-notice.small {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+}
+
+/* デスクトップでの年齢注意表示を確実にする */
+@media (min-width: 769px) {
+    .age-notice {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
 }
 
 .disclaimer {
@@ -252,7 +295,7 @@ body {
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    z-index: 1000;
+    z-index: 1001;
     box-shadow: 0 2px 20px rgba(255, 105, 180, 0.1);
 }
 
@@ -260,10 +303,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    padding: clamp(12px, 1.1vw, 18px) 20px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
 }
 
 .logo {
@@ -273,18 +315,24 @@ body {
     text-decoration: none;
     margin: 0;
     line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 /* 画像ロゴのサイズ最適化 */
 
 .logo img {
-    height: 60px;
-    width: auto;
     display: block;
+    width: clamp(120px, 22vw, 220px);
+    max-width: 100%;
+    height: auto;
 }
 
 @media (max-width: 768px) {
-    .logo img { height: 28px; }
+    .logo img {
+        width: clamp(110px, 34vw, 180px);
+    }
 }
 
 .nav-menu {
@@ -1080,6 +1128,9 @@ body {
 
 /* 印刷スタイル */
 @media print {
+    body {
+        padding-top: 0;
+    }
     .header, .sidebar, .download-section {
         display: none;
     }
@@ -1103,3 +1154,15 @@ body[data-mode="ad"] .article-body { max-width: 820px; margin: 0 auto; }
 body[data-mode="ad"] .article-header { display: none; }
 body[data-mode="ad"] #intro { display: none; }
 body[data-mode="ad"] .nav-menu a[href="#intro"] { display: none; }
+/* ADモード：年齢注意は必ず表示 */
+body[data-mode="ad"] .age-notice-wrapper { 
+    display: block !important; 
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+body[data-mode="ad"] .age-notice { 
+    display: block !important; 
+    visibility: visible !important;
+    opacity: 1 !important;
+}

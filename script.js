@@ -1,5 +1,34 @@
 // DOMが読み込まれたら実行
 document.addEventListener('DOMContentLoaded', function() {
+    // 年齢注意の帯の診断
+    const ageNoticeWrapper = document.querySelector('.age-notice-wrapper');
+    const ageNotice = document.querySelector('.age-notice');
+    if (ageNoticeWrapper && ageNotice) {
+        console.log('年齢注意の帯が見つかりました:', {wrapper: ageNoticeWrapper, notice: ageNotice});
+        const wrapperStyles = window.getComputedStyle(ageNoticeWrapper);
+        const noticeStyles = window.getComputedStyle(ageNotice);
+        console.log('Wrapper表示状態:', {
+            display: wrapperStyles.display,
+            visibility: wrapperStyles.visibility,
+            opacity: wrapperStyles.opacity,
+            position: wrapperStyles.position,
+            top: wrapperStyles.top,
+            zIndex: wrapperStyles.zIndex,
+            offsetHeight: ageNoticeWrapper.offsetHeight,
+            offsetTop: ageNoticeWrapper.offsetTop
+        });
+        console.log('Notice表示状態:', {
+            display: noticeStyles.display,
+            visibility: noticeStyles.visibility,
+            opacity: noticeStyles.opacity,
+            background: noticeStyles.background,
+            color: noticeStyles.color,
+            offsetHeight: ageNotice.offsetHeight
+        });
+    } else {
+        console.error('年齢注意の帯が見つかりません！', {wrapper: ageNoticeWrapper, notice: ageNotice});
+    }
+
     // スクロール時のアニメーション
     initScrollAnimation();
 
@@ -25,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // シェアボタンの初期化
     initShareButtons();
+
+    // CTAボタンのアフィリエイトリンク設定
+    initAffiliateLinks();
 });
 
 // スクロール時のアニメーション
@@ -52,6 +84,11 @@ function initSmoothScroll() {
     const links = document.querySelectorAll('a[href^="#"]');
 
     links.forEach(link => {
+        // CTAボタンは除外（アフィリエイトリンク処理で処理される）
+        if (link.classList.contains('hero-cta') || link.classList.contains('sidebar-btn')) {
+            return;
+        }
+
         link.addEventListener('click', function(e) {
             e.preventDefault();
 
@@ -296,6 +333,65 @@ function shareOnFacebook() {
     const url = encodeURIComponent(window.location.href);
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
     window.open(facebookUrl, '_blank', 'width=600,height=600');
+}
+
+// デバイス判定関数
+function detectDevice() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    
+    // iOS判定
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return 'ios';
+    }
+    
+    // Android判定
+    if (/android/i.test(userAgent)) {
+        return 'android';
+    }
+    
+    // その他（デスクトップなど）
+    return 'other';
+}
+
+// アフィリエイトリンクの設定
+function initAffiliateLinks() {
+    // デバイス判定
+    const device = detectDevice();
+
+    // CTAボタンのクリックイベントを設定
+    const ctaButtons = document.querySelectorAll('.hero-cta, .sidebar-btn');
+    ctaButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // #downloadへのスクロールを防ぐ
+            if (this.getAttribute('href') === '#download') {
+                e.preventDefault();
+            }
+
+            // HTMLのdata属性からリンクを取得
+            const iosLink = this.getAttribute('data-ios-link');
+            const androidLink = this.getAttribute('data-android-link');
+
+            // デバイスに応じたリンクに遷移
+            if (device === 'ios' && iosLink) {
+                window.location.href = iosLink;
+            } else if (device === 'android' && androidLink) {
+                window.location.href = androidLink;
+            } else {
+                // その他のデバイスの場合は、既存の#downloadセクションにスクロール
+                const downloadSection = document.getElementById('download');
+                if (downloadSection) {
+                    e.preventDefault();
+                    const headerOffset = document.querySelector('.header')?.offsetHeight || 0;
+                    const elementPosition = downloadSection.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset - 20;
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
 }
 
 // ダウンロードボタンのCSSを追加
